@@ -1,0 +1,111 @@
+#include <iostream>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
+
+class Stack {
+private:
+    int* arr; // Dynamic array to store the stack
+    int top; // Index of the top element of the stack
+    int maxSize; // Maximum size of the stack
+
+public:
+    Stack(int size) {
+        arr = new int[size]; // Creating a dynamic array of size "size"
+        top = -1; // Initializing top to -1 to indicate an empty stack
+        maxSize = size; // Setting the maximum size of the stack
+    }
+
+    ~Stack() {
+        delete[] arr; // Freeing the memory allocated for the dynamic array
+    }
+
+    void push(int value) {
+        if (isFull()) { // Checking if the stack is full
+            cout << "Error: Stack overflow" << endl;
+            return;
+        }
+
+        top++; // Incrementing top to point to the next available position in the array
+        arr[top] = value; // Inserting the new element at the top of the stack
+    }
+
+    void pop() {
+        if (isEmpty()) { // Checking if the stack is empty
+            cout << "Error: Stack underflow" << endl;
+            return;
+        }
+
+        top--; // Decrementing top to remove the top element of the stack
+    }
+
+    bool isEmpty() {
+        return (top == -1); // Returning true if the stack is empty, false otherwise
+    }
+
+    bool isFull() {
+        return (top == maxSize - 1); // Returning true if the stack is full, false otherwise
+    }
+
+    int stackTop() {
+        if (isEmpty()) { // Checking if the stack is empty
+            cout << "Error: Stack is empty" << endl;
+            return -1;
+        }
+
+        return arr[top]; // Returning the top element of the stack
+    }
+
+    void display() {
+        if (isEmpty()) { // Checking if the stack is empty
+            cout << "Stack is empty" << endl;
+            return;
+        }
+
+        cout << "Elements in the stack: ";
+        for (int i = top; i >= 0; i--) {
+            cout << arr[i] << " "; // Printing the elements in the stack from top to bottom
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    int size;
+    cout << "Enter the maximum size of the stack: ";
+    cin >> size;
+    Stack stack(size);
+
+    auto start = high_resolution_clock::now(); // get the current time
+
+    stack.push(8);
+    stack.push(10);
+    stack.push(5);
+    stack.push(11);
+    stack.push(15);
+    stack.push(23);
+    stack.push(6);
+    stack.push(18);
+    stack.push(20);
+    stack.push(17);
+    stack.display();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.display();
+    stack.push(4);
+    stack.push(30);
+    stack.push(3);
+    stack.push(1);
+    stack.display();
+
+    auto stop = high_resolution_clock::now(); // get the current time
+    auto duration = duration_cast<microseconds>(stop - start); // calculate the duration in microseconds
+
+    cout << "Time taken by task: " << duration.count() << " microseconds" << endl;
+
+    return 0;
+}
