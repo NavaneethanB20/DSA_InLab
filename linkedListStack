@@ -1,0 +1,126 @@
+#include <iostream>
+#include <chrono>
+
+using namespace std;
+using namespace std::chrono;
+
+class Node {
+public:
+    int data; // Data stored in the node
+    Node* next; // Pointer to the next node in the linked list
+
+    Node(int value) {
+        data = value;
+        next = NULL;
+    }
+};
+
+class Stack {
+private:
+    Node* top; // Pointer to the top node of the stack
+    int size;
+    int maxSize;
+
+public:
+    Stack(int maxSize) {
+        top = NULL; // Initializing top to NULL to indicate an empty stack
+        size = 0;
+        this->maxSize = maxSize;
+    }
+
+    void push(int value) {
+        if (isFull()) {
+            cout << "Error: Stack overflow" << endl;
+            return;
+        }
+
+        Node* newNode = new Node(value); // Creating a new node to store the new element
+        newNode->next = top; // Making the new node the top node of the stack
+        top = newNode;
+        size++;
+    }
+
+    void pop() {
+        if (isEmpty()) { // Checking if the stack is empty
+            cout << "Error: Stack underflow" << endl;
+            return;
+        }
+
+        Node* temp = top; // Temporarily storing the top node to delete it later
+        top = top->next; // Making the next node the new top node of the stack
+        delete temp; // Deleting the previous top node to free up memory
+        size--;
+    }
+
+    bool isEmpty() {
+        return (top == NULL); // Returning true if the stack is empty, false otherwise
+    }
+
+    bool isFull() {
+        return (size == maxSize); // Returning true if the stack is full, false otherwise
+    }
+
+    int stackTop() {
+        if (isEmpty()) { // Checking if the stack is empty
+            cout << "Error: Stack is empty" << endl;
+            return -1;
+        }
+
+        return top->data; // Returning the data stored in the top node of the stack
+    }
+
+    void display() {
+        if (isEmpty()) { // Checking if the stack is empty
+            cout << "Stack is empty" << endl;
+            return;
+        }
+
+        cout << "Elements in the stack: ";
+        Node* current = top;
+        while (current != NULL) {
+            cout << current->data << " "; // Printing the data stored in each node of the stack
+            current = current->next;
+        }
+        cout << endl;
+    }
+};
+
+int main() {
+    int maxSize;
+    cout << "Maximum size of the stack : ";
+    cin >> maxSize;
+
+    Stack stack(maxSize);
+
+    auto start = high_resolution_clock::now(); // get the current time
+
+    stack.push(8);
+    stack.push(10);
+    stack.push(5);
+    stack.push(11);
+    stack.push(15);
+    stack.push(23);
+    stack.push(6);
+    stack.push(18);
+    stack.push(20);
+    stack.push(17);
+    stack.display();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.pop();
+    stack.display();
+    stack.push(4);
+    stack.push(30);
+    stack.push(3);
+    stack.push(1);
+    stack.display();
+
+    auto stop = high_resolution_clock::now(); // get the current time
+    auto duration = duration_cast<microseconds>(stop - start); // calculate the duration in microseconds
+
+    cout << "Time taken by task: " << duration.count() << " microseconds" << endl;
+
+    return 0;
+}
